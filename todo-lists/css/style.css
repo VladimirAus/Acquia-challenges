@@ -1,0 +1,48 @@
+/* @group Layout */
+
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.3333;
+	padding: 2em;
+}
+.tile {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0.25em 1em;
+}
+
+/* @end */
+
+/* @group Styling */
+
+.todo.modern {
+	border-radius: 20px;
+	border-style: solid;
+	border-width: 5px;
+}
+.todo.modern.today {
+	background-color: rgba(255, 220, 150, 0.1);
+	border-color: rgb(225, 150, 10);
+	box-shadow: 0 0 0px 3px rgba(255,220,150,0.5) inset, 0 0 0px 3px rgba(255,220,150,0.5);
+}
+.todo.modern.tomorrow {
+	background-color: rgba(255, 60, 60, 0.1);
+	border-color: rgb(235, 20, 20);
+	box-shadow: 0 0 0px 3px rgba(255,50,50,0.2) inset, 0 0 0px 3px rgba(255,50,50,0.2);
+}
+.todo .todo-submit {
+	margin-left: 0.3333em;
+}
+.instructions {
+	border: 1px solid #eee;
+	padding: 0.25em;
+}
+.instructions li + li {
+	margin-top: 0.75em;
+}
+.instructions ul > li:first-child {
+	margin-top: 0.3333em;
+}
+
+/* @end */

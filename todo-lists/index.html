@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Todo Lists</title>
+		<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<script src="plugins/jquery.todo.js"></script>
+		<script src="js/control.js"></script>
+		<link type="text/css" rel="stylesheet" href="../plugins/960-Grid-System/code/css/960.css" />
+		<link type="text/css" rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<div class="container_16">
+			<div class="grid_6">
+				<div class="instructions">
+				  <h2>Instructions</h2>
+				  <ol>
+				    <li><a href="https://github.com/acquia/challenges">Clone this repository</a> on to your machine.</li>
+				    <li>Work through the tasks that you've been asked to demonstrate.</li>
+				    <li><a href="http://help.github.com/create-a-repo/">Create a public repo</a> in your Github account and push your changes to that repo.</li>
+				    <li>Send a link to your repo to your contact at Acquia.</li>
+				  </ol>
+					<h2>Task list</h2>
+					<ol>
+						<li><strong>(10 minutes)</strong> Add a delete action to elements in the list.</li>
+						<li><strong>(10 minutes)</strong> There's a bug in the plugin. The input allows Cross-site scripting attacks (XSS). Resolve this issue.
+							<ul>
+								<li><a href="https://skitch.com/jesse.beach/8yhpw/google-chrome">XSS screenshot</a></li>
+							</ul>
+						</li>
+						<li><strong>(15 minutes)</strong> Add an option to the plugin at invocation to render an ordered list. It is currently hard-coded to an unordered list. The unordered list should be the default.</li>
+						<li><strong>(15 minutes)</strong> There's a bug in the plugin. Items can't be added to the list with the enter key in Firefox. Resolve this issue.</li>
+						<li><strong>(1h - 1.5h)</strong> Add drag-drop reordering of items within a list.</li>
+						<li><strong>(1h)</strong> Enable drag and drop of items between the two lists. The new item appends to the bottom of the target list and disappears from the source list.</li>
+					</ol>
+				</div>
+			</div>
+			<div class="grid_5">
+				<div class="todo today tile modern">
+					<h2>Due today</h2>
+				</div>
+			</div>
+			
+			<div class="grid_5">
+				<div class="todo tomorrow tile modern">
+					<h2>Due tomorrow</h2>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
