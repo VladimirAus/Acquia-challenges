@@ -1,6 +1,6 @@
 (function ($, window, document, undefined) {
 	$(document).ready(function ($) {
-		$('.todo.unordered').todo();
-		$('.todo.ordered').todo({ordered: true});
+		$('.todo.today').todo(); //example of unordered list
+		$('.todo.tomorrow').todo({ordered: true}); //example of ordered list
 	});
 } (jQuery, window, document, undefined));
