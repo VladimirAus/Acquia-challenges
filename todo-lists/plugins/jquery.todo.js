@@ -25,15 +25,39 @@
 		$input = $wrapper.find('.todo-input'),
 		$list = $wrapper.find('.todo-list'),
 		value = $input.val();
+		
 		// Add the item.
-		if (value !== undefined && value.length > 0) {
-			$list.append($('<li>', {
+		if (value !== undefined && value.length > 0
+			&& (value.search("<script") == -1) && (value.search("javascript:") == -1) // XSS prevention
+			&& (value.search("<li") == -1) && (value.search("<ul") == -1) && (value.search("<ol") == -1)  // extra exclusions for XSS
+			// Might just completely switch off html tags
+		) {
+			
+			var newList = $('<li>', {
 				html: value
-			}));
+			});
+			
+			//create a delete link
+			var newAnchor = $('<a>', { 
+				href: 'item/delete', 
+				text: 'delete' 
+			}).addClass('todo-delete');
+			 
+			newList.append(newAnchor);
+			$list.append(newList);
+			
 			$input.val('');
 		}
 	}
 	/**
+	 * Remove item from the todo list.
+	 */
+	function removeItem (event) {
+		event.preventDefault();
+		var clickedLink = $(event.target);
+		clickedLink.parent().remove(); // Anchor tem is always directly inside list
+	}
+	/**i
 	 * A general purpose function that checks allowed keys configured
 	 * as part of the event handler registry and calls 
 	 * the configured function if the triggering key is part of the allowed set.
@@ -42,7 +66,8 @@
 	 * event.data.fn (Function): The function to call
 	 */
 	function keyManager (event) {
-		if ($.inArray(event.charCode, event.data.keys) > -1) {
+		if ($.inArray(event.charCode, event.data.keys) > -1 || 
+			$.inArray(event.keyCode, event.data.keys) > -1)  { //fix for firefox
 			event.data.fn(event);
 		}
 	}
@@ -50,7 +75,7 @@
 	 * Given a wrapper element, such as a div, append the DOM elements
 	 * the allow a user to add new list elements.
 	 */
-	function buildTodoList () {
+	function buildTodoList (isOrdered) {
 		var $wrapper = $('<div>');
 		$wrapper.append($('<input>', {
 			type: 'text'
@@ -59,7 +84,30 @@
 			href: '/item/add',
 			text: 'add item'
 		}).addClass('todo-submit'));
-		$wrapper.append($('<ul>', {}).addClass('todo-list'));
+		
+		var list;
+		
+		var displayUnorderedList = (isOrdered === undefined || !isOrdered);
+		list = $(displayUnorderedList?'<ul>':'<ol>', {}).addClass('todo-list');
+		
+		// Drag and drop functionality using jQuery.ui
+		list.sortable({
+			connectWith: ".todo-list",
+			dropOnEmpty: true,
+			stop: function(event, ui) { // put dragged item on the bottom of the list
+				var list = event.target.parentElement;
+				if (ui.item.index() + 1 < list.childElementCount) {
+					var itemTmp = jQuery.extend(true, {}, ui.item); // deep copy of the object
+					
+					ui.item.remove();
+					$(list).append(itemTmp);
+				}
+			}
+		});
+		
+		list.disableSelection();
+		$wrapper.append(list);
+			
 		return $wrapper.contents();
 	}
 
@@ -71,13 +119,19 @@
 			return this.each(function () {
 				// Build the todo list.
 				$(this)
-				.append(buildTodoList())
+				.append(buildTodoList(options != undefined ? options.ordered : false))
 				.on({
 					'click': addItem,
 				}, '.todo-submit')
 				.on({
 					'keypress': keyManager
-				}, '.todo-input', {fn: addItem, keys: [13]});
+				}, '.todo-input', {fn: addItem, keys: [13]})
+				.on({ // Firefox fix
+					'onkeydown' : keyManager
+				}, '.todo-input', {fn: addItem, keys: [13]})
+				.on({ // attach delete event handler
+					'click' : removeItem 
+				}, '.todo-delete');
 			});
 		}
 	};
