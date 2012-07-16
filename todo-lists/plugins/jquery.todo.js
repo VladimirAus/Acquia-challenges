@@ -24,14 +24,10 @@
 		var $wrapper = $(event.delegateTarget),
 		$input = $wrapper.find('.todo-input'),
 		$list = $wrapper.find('.todo-list'),
-		value = $input.val();
+		value = stripHtmlTags($input.val()); // XSS prevention before length check
 		
 		// Add the item.
-		if (value !== undefined && value.length > 0
-			&& (value.search("<script") == -1) && (value.search("javascript:") == -1) // XSS prevention
-			&& (value.search("<li") == -1) && (value.search("<ul") == -1) && (value.search("<ol") == -1)  // extra exclusions for XSS
-			// Might just completely switch off html tags
-		) {
+		if (value !== undefined && value.length > 0) {
 			
 			var newList = $('<li>', {
 				html: value
@@ -57,7 +53,28 @@
 		var clickedLink = $(event.target);
 		clickedLink.parent().remove(); // Anchor tem is always directly inside list
 	}
-	/**i
+	/**
+	 * Remove HTML tags and special characters.
+	 */
+	function stripHtmlTags(html) {
+		// Stripping special characters
+		var arSpecChars = {"&gt;":"", "&lt;":"", "&amp;":"", 
+							"&#x3c;":"", "&#x3e;":"",
+							"&#":"", "\\u":""
+							}
+
+		for (var specChar in arSpecChars) {
+			html = html.replace(new RegExp(specChar, "g"), arSpecChars[specChar]);
+		}
+		
+		// Stripping HTML tags
+		var tmp = document.createElement("DIV");
+	 	tmp.innerHTML = html;
+	 	var resultStripped =  tmp.textContent || tmp.innerText; 
+		
+		return resultStripped;
+	}
+	/**
 	 * A general purpose function that checks allowed keys configured
 	 * as part of the event handler registry and calls 
 	 * the configured function if the triggering key is part of the allowed set.
